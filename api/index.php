@@ -24,7 +24,7 @@ if (!isset($_GET['bg']) or empty($_GET['bg'])) {
     } else if ($bg == "red") {
         $bg = "bg-red";
     } else if ($bg == "light") {
-        $bg = "bg-blue";
+        $bg = "bg-light";
     } else if ($bg == "green") {
         $bg = "bg-green";
     } else if ($bg == "pink") {
