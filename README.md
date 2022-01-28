@@ -1,7 +1,7 @@
 
 # Avamini API
 
-A simple and fast avatar API build with a single index.php
+A simple and fast avatar generator API build with a single index.php
 
 
 ## API Reference
@@ -12,45 +12,48 @@ A simple and fast avatar API build with a single index.php
   https://avamini.decko.my.id/api
 ```
 
-#### Change Background
+#### Change Color Background
 
 ```http
-  https://avamini.decko.my.id/api?bg=blue
+  https://avamini.decko.my.id/api?bg=de2f2f
 ```
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `bg` | `string` | See the available color bellow |
+| `bg` | `string` | Only work with hex color code |
 
-
-| Color             | Code                                                                |
-| ----------------- | ------------------------------------------------------------------ |
-| Blue | blue |
-| Red | red |
-| Yellow | yellow |
-| Green | green |
-| Pink | pink |
-| Black | dark |
-| White (bug) | light |
 
 #### Custom Text
 
 ```http
-  https://avamini.decko.my.id/api?text=yogi
+  https://avamini.decko.my.id/api?t=yogi
 ```
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `text`      | `string` | Only get first 2 character |
+| `t`      | `string` | Only get first 2 character |
 
-
-#### Mix
-
-you can also mix it.
+#### Change Color Text
 
 ```http
-  https://avamini.decko.my.id/api?text=yogi&bg=dark
+  https://avamini.decko.my.id/api?c=de2f2f
 ```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `c`      | `string` | Only work with hex color code |
+
+
+#### Resize Image
+
+```http
+  https://avamini.decko.my.id/api?s=200
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `s`      | `string` | Min 100px and Max 300px |
+
 ## Authors
 
 - [@yogibagus](https://www.github.com/yogibagus)
