@@ -1,57 +1,67 @@
 <?php
-// init text
-if (!isset($_GET['text']) or empty($_GET['text'])) {
+
+// get text
+if (!isset($_GET['t']) or empty($_GET['t'])) {
     // default
     $custom_text = "AV";
 } else {
     // custom text
-    $custom_text = $_GET['text'];
+    $custom_text = $_GET['t'];
 }
 
-// init background
+// get background color
 if (!isset($_GET['bg']) or empty($_GET['bg'])) {
-    // default
-    $bg = "bg-blue";
+    // default blue
+    $bgcolor = "#1972d1";
 } else {
-    // custom text
-    $bg = $_GET['bg'];
-    if ($bg == "dark") {
-        $bg = "bg-dark";
-    } else if ($bg == "blue") {
-        $bg = "bg-blue";
-    } else if ($bg == "yellow") {
-        $bg = "bg-yellow";
-    } else if ($bg == "red") {
-        $bg = "bg-red";
-    } else if ($bg == "light") {
-        $bg = "bg-light";
-    } else if ($bg == "green") {
-        $bg = "bg-green";
-    } else if ($bg == "pink") {
-        $bg = "bg-pink";
+    // custom bg
+    $bgcolor = $_GET['bg'];
+}
+
+// get text color
+if (!isset($_GET['c']) or empty($_GET['c'])) {
+    // default blue
+    $color = "#ffffff";
+} else {
+    // custom color
+    $color = $_GET['c'];
+}
+
+// get image size
+if (!isset($_GET['s']) or empty($_GET['s'])) {
+    // default size
+    $image_size = 150;
+} else {
+    if (isNumeric($_GET['s']) != false) {
+        // custom size
+        if ($_GET['s'] > 300 || $_GET['s'] < 100) { // max size 300 min size 100
+            $image_size = 150;
+        } else {
+            $image_size = $_GET['s'];
+        }
     } else {
-        // if bg not exist
-        $bg = "bg-blue";
+        $image_size = 150;
     }
 }
 
-// Create Image From Existing File
-$image = imagecreatefrompng('.././img/' . $bg . '.png');
 
-// Allocate A Color For The Text
-$white = imagecolorallocate($image, 255, 255, 255);
+// Create the image
+$image = imagecreate($image_size, $image_size);
 
-// Allocate A Color For The Text
-$black = imagecolorallocate($image, 0, 0, 0);
+// background color with hex
+hexColorAllocate($image, $bgcolor);
 
-// Set Path to Font File
+// Define color
+$font_color = hexColorAllocate($image, $color);
+
+// The text to draw
+$text = substr(strtoupper($custom_text), 0, 2);
+// Replace path by your own font path
 $font_path = realpath('.././font/arial.ttf');
 
-// Set Text to Be Printed On Image
-$text = substr(strtoupper($custom_text), 0, 2);
 
 // Set font size
-$font_size = 30;
+$font_size = getFontSize($image_size);
 
 //define image width
 $image_width = imagesx($image);
@@ -62,21 +72,47 @@ $text_width = $text_box[2] - $text_box[0]; // lower right corner - lower left co
 $text_height = $text_box[3] - $text_box[1];
 
 // centerd the text horizontal
-$x = ($image_width / 2) - ($text_width / 2) - 100;
+$x = ($image_width / 2) - ($text_width / 2);
 
 // vertical
-$y = 65;
+$y = getY($image_size);
 
 // Print Text On Image
-imagettftext($image, $font_size, 0, $x + 100, $y, $white, $font_path, $text);
+imagettftext($image, $font_size, 0, $x, $y, $font_color, $font_path, $text);
 
-ob_clean();
-
-//Set the Content Type
+// Set the content-type
 header('Content-Type: image/png');
 
-// Send Image to Browser
-imagepng($image);
 
-// clear memory
+// Using imagepng() results in clearer text compared with imagejpeg()
+imagepng($image);
 imagedestroy($image);
+
+// usable function
+function hexColorAllocate($image, $hex)
+{
+    $hex = ltrim($hex, '#');
+    $r = hexdec(substr($hex, 0, 2));
+    $g = hexdec(substr($hex, 2, 2));
+    $b = hexdec(substr($hex, 4, 2));
+    return imagecolorallocate($image, $r, $g, $b);
+}
+
+function getFontSize($image_size)
+{
+    return $image_size * (33.3 / 100);
+}
+
+function getY($image_size)
+{
+    return $image_size * (66.6 / 100);
+}
+
+function isNumeric($num)
+{
+    if (ctype_digit($num)) {
+        return $num;
+    } else {
+        return false;
+    }
+}
